@@ -349,6 +349,16 @@ main section { padding-block: 44px 0; }
   padding-inline: 8px; white-space: nowrap; overflow: hidden;
 }
 .g-bar.navy { color: #fff; }
+.g-track::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0;
+  left: calc((var(--today, 1) - 1) / 48 * 100%);
+  width: 2px;
+  background: #e53935;
+  pointer-events: none;
+  z-index: 1;
+}
 .g-head .g-track { background: none; height: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .g-head .g-track span { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.04em; }
 @media (max-width: 640px) {
@@ -1217,6 +1227,18 @@ footer p + p { margin-top: 8px; }
   }).catch(function () {
     document.getElementById('p-updated').textContent = 'The task list (progress.csv) could not be loaded.';
   });
+})();
+</script>
+<script>
+(function () {
+  var g = document.querySelector('.gantt');
+  if (!g) return;
+  var now = new Date();
+  // M1 = September 2026
+  var m = (now.getFullYear() - 2026) * 12 + (now.getMonth() - 8) + 1;
+  if (m < 1) m = 1;
+  if (m > 48) m = 48;
+  g.style.setProperty('--today', m);
 })();
 </script>
 </body>
