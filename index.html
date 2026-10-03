@@ -10,6 +10,28 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<script>
+/* Pick the view from the hash: '' and #top are the surface, #contact lives in
+   the footer (shown in both views), anything else is below the waterline. */
+(function () {
+  var root = document.documentElement;
+  function viewFor(hash) {
+    if (hash === '' || hash === '#' || hash === '#top') return 'surface';
+    if (hash === '#contact') return null;
+    return 'deep';
+  }
+  root.dataset.view = viewFor(location.hash) || 'surface';
+  window.addEventListener('hashchange', function () {
+    var v = viewFor(location.hash);
+    if (!v || v === root.dataset.view) return;
+    root.dataset.view = v;
+    // the browser could not scroll to a target that was hidden; do it now
+    var t = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+    if (v === 'surface' || !t) window.scrollTo({ top: 0, behavior: 'instant' });
+    else t.scrollIntoView({ behavior: 'instant' });
+  });
+})();
+</script>
 <style>
 /* Palette from the COMEDI logo: ocean blue ring, dark navy lettering and the
    four objective colours. Display face Jost is close to the logo lettering. */
@@ -105,7 +127,7 @@ ul { margin: 0; padding-left: 1.1em; }
 .hero {
   position: relative;
   background: var(--hero);
-  padding-block: 8px 150px;
+  padding-block: 8px 56px;
   text-align: center;
 }
 .back { font-size: 0.9rem; }
@@ -137,10 +159,6 @@ ul { margin: 0; padding-left: 1.1em; }
 .facts dt { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .facts dd { margin: 3px 0 0; font-weight: 600; line-height: 1.35; font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.hero-waves { position: absolute; left: 0; right: 0; bottom: -1px; width: 100%; height: 76px; display: block; }
-.hero-waves .w1 { fill: #175f83; opacity: 0.35; animation: swell 7s ease-in-out infinite; }
-.hero-waves .w2 { fill: #175f83; opacity: 0.7; animation: swell 5s ease-in-out -2s infinite; }
-@keyframes swell { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
 /* ---------- at a glance (above the waterline) ---------- */
 .glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; text-align: left; }
@@ -165,16 +183,22 @@ ul { margin: 0; padding-left: 1.1em; }
 .gl-more::after { content: " \2193"; }
 @media (max-width: 860px) { .glance { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- the waterline ---------- */
-.dive {
-  position: absolute; left: 50%; bottom: 82px; transform: translateX(-50%);
+/* ---------- the two views ----------
+   The page has two parts: the surface (hero and at-a-glance cards) and the
+   depths (detail sections). Only one is shown at a time; html[data-view]
+   is set from the URL hash before the body renders. */
+html[data-view="surface"] main.deep, html[data-view="deep"] header.hero { display: none; }
+.dive, .resurface {
+  width: max-content; margin: 40px auto 0;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
   font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--muted); text-decoration: none;
 }
-.dive:hover { color: var(--link); }
-.dive svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; animation: bob 2.4s ease-in-out infinite; }
+.dive:hover, .resurface:hover { color: var(--link); }
+.dive svg, .resurface svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; animation: bob 2.4s ease-in-out infinite; }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
+.resurface { margin-top: 64px; }
+.resurface svg { animation-direction: reverse; }
 
 /* ---------- below the waterline ---------- */
 .deep { background: linear-gradient(180deg, var(--bg) 0, var(--sea) 100%); padding-bottom: 40px; counter-reset: depth; }
@@ -182,7 +206,6 @@ ul { margin: 0; padding-left: 1.1em; }
 .deep section + section { margin-top: 28px; border-top: 1px solid color-mix(in srgb, var(--deep) 20%, transparent); }
 .deep section > .section-head:first-child .eyebrow::before { content: counter(depth, decimal-leading-zero) " \00b7\00a0"; color: var(--deep); font-weight: 500; }
 .deep section > .section-head:first-child h2 { font-size: 2rem; }
-.hero-waves .w3 { fill: var(--bg); }
 
 /* ---------- sections ---------- */
 main section { padding-block: 56px 0; }
@@ -470,39 +493,65 @@ footer p + p { margin-top: 8px; }
 @media (max-width: 680px) { footer .cols { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- navigation ----------
-   Light and glassy above the waterline; turns navy once the reader dives
-   below it. The thin bar along the bottom fills with depth (scroll). */
+   The bar is the waterline. On the surface the tide sits low and a wave runs
+   along the bottom of the bar; diving below raises the tide until the bar is
+   under water. One element, so there is no separate wave strip on the page. */
 .skip { position: absolute; left: 12px; top: -48px; z-index: 60; background: var(--surface); padding: 8px 12px; border-radius: 8px; }
 .skip:focus { top: 8px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .site-nav {
-  position: sticky; top: 0; z-index: 50;
-  background: color-mix(in srgb, var(--hero) 86%, transparent);
+  position: sticky; top: 0; z-index: 50; isolation: isolate;
+  --tide: calc(var(--nav-h) - 13px);
+  background: color-mix(in srgb, var(--hero) 88%, transparent);
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--line);
-  transition: background-color 0.35s ease, border-color 0.35s ease;
 }
-.nav-inner { max-width: 1160px; margin: 0 auto; padding-inline: 20px; height: var(--nav-h); display: flex; align-items: center; gap: 16px; }
+html[data-view="deep"] .site-nav { --tide: -9px; }
+.nav-water { position: absolute; inset: 0; overflow: hidden; z-index: -1; pointer-events: none; }
+.swell {
+  --crest: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 14' preserveAspectRatio='none'%3E%3Cpath d='M0 7 C 40 0 40 0 80 7 S 120 14 160 7 V14 H0 Z'/%3E%3C/svg%3E");
+  position: absolute; left: 0; right: 0; top: var(--tide); height: calc(var(--nav-h) + 24px);
+  background: var(--deep);
+  -webkit-mask: var(--crest) 0 0 / 160px 14px repeat-x, linear-gradient(#000, #000) 0 13px / 100% 100% no-repeat;
+  mask: var(--crest) 0 0 / 160px 14px repeat-x, linear-gradient(#000, #000) 0 13px / 100% 100% no-repeat;
+  animation: drift 9s linear infinite;
+  transition: top 0.9s cubic-bezier(0.6, 0, 0.25, 1), background-color 0.9s ease;
+}
+.swell.back { opacity: 0.4; margin-top: -4px; animation-duration: 14s; animation-direction: reverse; }
+html[data-view="deep"] .swell.front { background: var(--navy); }
+html[data-view="deep"] .swell.back { background: var(--o1); opacity: 0.55; }
+@keyframes drift {
+  from { -webkit-mask-position: 0 0, 0 13px; mask-position: 0 0, 0 13px; }
+  to { -webkit-mask-position: 160px 0, 0 13px; mask-position: 160px 0, 0 13px; }
+}
+@media (prefers-reduced-motion: reduce) { .swell { animation: none; transition: none; } }
+.nav-inner { max-width: 1160px; margin: 0 auto; padding-inline: 20px; height: var(--nav-h); display: flex; align-items: center; gap: 16px; padding-bottom: 8px; transition: padding 0.9s ease; }
+html[data-view="deep"] .nav-inner { padding-bottom: 0; }
 .brand { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--logo-ink); font-family: var(--display); font-weight: 700; font-size: 1.25rem; letter-spacing: 0.04em; }
 .brand img { width: 30px; height: 30px; border-radius: 50%; background: #fff; padding: 1px; }
-.nav-links { list-style: none; margin: 0 0 0 auto; padding: 0; display: flex; gap: 2px; }
+.nav-links { list-style: none; margin: 0 0 0 auto; padding: 0; display: flex; align-items: center; gap: 2px; }
 .nav-links a {
   position: relative; display: block; padding: 7px 10px; border-radius: 8px;
   font-weight: 600; font-size: 0.93rem; color: var(--muted); text-decoration: none; white-space: nowrap;
+  transition: color 0.4s ease;
 }
 .nav-links a:hover { color: var(--ink); background: color-mix(in srgb, var(--deep) 10%, transparent); }
 .nav-links a[aria-current="true"] { color: var(--ink); }
 .nav-links a[aria-current="true"]::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 1px; height: 2px; border-radius: 2px; background: var(--deep); }
-.nav-depth { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; }
-.nav-depth span { display: block; height: 100%; width: var(--depth, 0%); background: linear-gradient(90deg, var(--o1), var(--o2), var(--o3), var(--o4)); }
-.site-nav.under { background: color-mix(in srgb, var(--navy) 94%, transparent); border-bottom-color: transparent; }
-.site-nav.under .brand { color: #fff; }
-.site-nav.under .nav-links a { color: rgba(255, 255, 255, 0.72); }
-.site-nav.under .nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
-.site-nav.under .nav-links a[aria-current="true"] { color: #fff; }
-.site-nav.under .nav-links a[aria-current="true"]::after { background: var(--o1); }
+/* the surface link carries a small wave; everything after it is below water */
+.nav-links .to-surface { display: flex; align-items: center; gap: 6px; }
+.nav-links .to-surface svg { width: 18px; height: 10px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.nav-links .sep { width: 1px; height: 22px; margin-inline: 6px; background: var(--line); }
+/* text turns light only once the water has risen behind it */
+.brand, .nav-toggle { transition: color 0.4s ease; }
+html[data-view="deep"] .brand, html[data-view="deep"] .nav-links a, html[data-view="deep"] .nav-toggle { transition-delay: 0.45s; }
+html[data-view="deep"] .brand { color: #fff; }
+html[data-view="deep"] .nav-links a { color: rgba(255, 255, 255, 0.72); }
+html[data-view="deep"] .nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+html[data-view="deep"] .nav-links a[aria-current="true"] { color: #fff; }
+html[data-view="deep"] .nav-links a[aria-current="true"]::after { background: var(--o1); }
+html[data-view="deep"] .nav-links .sep { background: rgba(255, 255, 255, 0.25); }
 .nav-toggle { display: none; margin-left: auto; width: 42px; height: 42px; border: 0; border-radius: 8px; background: none; color: var(--ink); cursor: pointer; place-items: center; }
-.site-nav.under .nav-toggle { color: #fff; }
+html[data-view="deep"] .nav-toggle { color: #fff; }
 .bars, .bars::before, .bars::after { display: block; width: 20px; height: 2px; border-radius: 2px; background: currentColor; transition: transform 0.25s ease, opacity 0.2s ease; }
 .bars { position: relative; }
 .bars::before, .bars::after { content: ""; position: absolute; left: 0; }
@@ -514,13 +563,14 @@ footer p + p { margin-top: 8px; }
   .nav-toggle { display: grid; }
   .nav-links {
     display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
-    flex-direction: column; gap: 0; padding: 8px 12px 14px;
+    flex-direction: column; align-items: stretch; gap: 0; padding: 8px 12px 14px;
     background: var(--surface); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
   }
   .nav-links.open { display: flex; }
   .nav-links a { padding: 11px 10px; font-size: 1rem; }
   .nav-links a[aria-current="true"]::after { left: 0; right: auto; top: 10px; bottom: 10px; width: 3px; height: auto; }
-  .site-nav.under .nav-links { background: var(--navy); border-bottom-color: transparent; }
+  .nav-links .sep { width: auto; height: 1px; margin: 6px 10px; }
+  html[data-view="deep"] .nav-links { background: var(--navy); border-bottom-color: transparent; }
 }
 
 /* ---------- progress ---------- */
@@ -589,7 +639,8 @@ footer p + p { margin-top: 8px; }
     <a class="brand" href="#top"><img src="COMEDI.icon.svg" alt="" width="30" height="30"><span>COMEDI</span></a>
     <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><span class="bars" aria-hidden="true"></span><span class="sr">Menu</span></button>
     <ul class="nav-links" id="nav-links">
-      <li><a href="#top">Home</a></li>
+      <li><a class="to-surface" href="#top"><svg viewBox="0 0 18 10" aria-hidden="true"><path d="M1 5 C 4 1 5 1 9 5 S 14 9 17 5"/></svg>Surface</a></li>
+      <li class="sep" aria-hidden="true"></li>
       <li><a href="#about">About</a></li>
       <li><a href="#objectives">Objectives</a></li>
       <li><a href="#workprogress">Work progress</a></li>
@@ -599,7 +650,7 @@ footer p + p { margin-top: 8px; }
       <li><a href="#contact">Contact</a></li>
     </ul>
   </div>
-  <div class="nav-depth" aria-hidden="true"><span></span></div>
+  <div class="nav-water" aria-hidden="true"><span class="swell back"></span><span class="swell front"></span></div>
 </nav>
 
 <header class="hero" id="top">
@@ -646,10 +697,6 @@ footer p + p { margin-top: 8px; }
     </div>
   </div>
   <a class="dive" href="#about">Dive deeper<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></a>
-  <svg class="hero-waves" viewBox="0 0 1200 80" preserveAspectRatio="none" aria-hidden="true">
-<path class="w1" d="M 0 80 L 0 37.0 L 20 39.1 L 40 40.9 L 60 42.4 L 80 43.4 L 100 43.9 L 120 43.9 L 140 43.4 L 160 42.4 L 180 40.9 L 200 39.1 L 220 37.0 L 240 34.8 L 260 32.5 L 280 30.3 L 300 28.2 L 320 26.5 L 340 25.2 L 360 24.4 L 380 24.0 L 400 24.2 L 420 24.9 L 440 26.1 L 460 27.7 L 480 29.6 L 500 31.8 L 520 34.1 L 540 36.3 L 560 38.5 L 580 40.4 L 600 42.0 L 620 43.2 L 640 43.8 L 660 44.0 L 680 43.6 L 700 42.7 L 720 41.4 L 740 39.7 L 760 37.6 L 780 35.4 L 800 33.1 L 820 30.8 L 840 28.8 L 860 27.0 L 880 25.5 L 900 24.5 L 920 24.0 L 940 24.1 L 960 24.7 L 980 25.7 L 1000 27.2 L 1020 29.1 L 1040 31.2 L 1060 33.4 L 1080 35.7 L 1100 37.9 L 1120 39.9 L 1140 41.6 L 1160 42.9 L 1180 43.7 L 1200 44.0 L 1200 80 Z"/>
-<path class="w2" d="M 0 80 L 0 53.6 L 20 52.4 L 40 50.5 L 60 48.1 L 80 45.5 L 100 43.0 L 120 40.8 L 140 39.1 L 160 38.2 L 180 38.0 L 200 38.7 L 220 40.2 L 240 42.3 L 260 44.7 L 280 47.3 L 300 49.7 L 320 51.8 L 340 53.3 L 360 54.0 L 380 53.8 L 400 52.9 L 420 51.2 L 440 49.0 L 460 46.5 L 480 43.9 L 500 41.5 L 520 39.7 L 540 38.4 L 560 38.0 L 580 38.4 L 600 39.6 L 620 41.5 L 640 43.8 L 660 46.4 L 680 48.9 L 700 51.1 L 720 52.8 L 740 53.8 L 760 54.0 L 780 53.3 L 800 51.9 L 820 49.8 L 840 47.4 L 860 44.8 L 880 42.3 L 900 40.3 L 920 38.8 L 940 38.1 L 960 38.2 L 980 39.1 L 1000 40.7 L 1020 42.9 L 1040 45.5 L 1060 48.0 L 1080 50.4 L 1100 52.3 L 1120 53.5 L 1140 54.0 L 1160 53.6 L 1180 52.5 L 1200 50.6 L 1200 80 Z"/>
-<path class="w3" d="M 0 80 L 0 53.5 L 20 52.9 L 40 52.4 L 60 52.1 L 80 52.0 L 100 52.0 L 120 52.3 L 140 52.6 L 160 53.1 L 180 53.8 L 200 54.6 L 220 55.4 L 240 56.4 L 260 57.4 L 280 58.4 L 300 59.4 L 320 60.3 L 340 61.2 L 360 62.0 L 380 62.7 L 400 63.3 L 420 63.7 L 440 63.9 L 460 64.0 L 480 63.9 L 500 63.7 L 520 63.3 L 540 62.7 L 560 62.0 L 580 61.2 L 600 60.3 L 620 59.4 L 640 58.4 L 660 57.4 L 680 56.4 L 700 55.4 L 720 54.6 L 740 53.8 L 760 53.1 L 780 52.6 L 800 52.3 L 820 52.0 L 840 52.0 L 860 52.1 L 880 52.4 L 900 52.9 L 920 53.5 L 940 54.2 L 960 55.0 L 980 55.9 L 1000 56.9 L 1020 57.9 L 1040 58.9 L 1060 59.9 L 1080 60.8 L 1100 61.6 L 1120 62.4 L 1140 63.0 L 1160 63.5 L 1180 63.8 L 1200 64.0 L 1200 80 Z"/></svg>
 </header>
 
 <main class="deep" id="main">
@@ -1037,6 +1084,7 @@ footer p + p { margin-top: 8px; }
       </ul>
   </section>
 
+  <a class="resurface" href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>Back to the surface</a>
 </div>
 </main>
 
@@ -1102,7 +1150,7 @@ footer p + p { margin-top: 8px; }
       panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     }
     try {
-      history.replaceState(null, '', n ? '#objective-' + n : location.pathname + location.search);
+      history.replaceState(null, '', n ? '#objective-' + n : '#objectives');
     } catch (e) {}
   }
 
@@ -1136,7 +1184,6 @@ footer p + p { margin-top: 8px; }
   var nav = document.getElementById('site-nav');
   var list = document.getElementById('nav-links');
   var toggle = nav.querySelector('.nav-toggle');
-  var hero = document.getElementById('top');
   var links = Array.prototype.slice.call(list.querySelectorAll('a'));
   var targets = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); });
   var LEGACY = { outcomes: 'outputs' };
@@ -1152,14 +1199,15 @@ footer p + p { margin-top: 8px; }
   var ticking = false;
   function update() {
     ticking = false;
-    var navH = nav.offsetHeight;
-    // the nav goes navy once the waterline passes beneath it
-    nav.classList.toggle('under', hero.getBoundingClientRect().bottom - 40 <= navH);
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    nav.style.setProperty('--depth', (max > 0 ? Math.min(100, 100 * window.scrollY / max) : 0) + '%');
-    var line = navH + window.innerHeight * 0.3, cur = 0;
-    targets.forEach(function (t, i) { if (t && t.getBoundingClientRect().top <= line) cur = i; });
-    if (max > 0 && window.scrollY >= max - 2) cur = targets.length - 1;
+    var navH = nav.offsetHeight, cur = 0;
+    // on the surface only the surface link is current; below, follow the scroll
+    if (document.documentElement.dataset.view === 'deep') {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var line = navH + window.innerHeight * 0.3;
+      cur = 1;
+      targets.forEach(function (t, i) { if (i && t && t.getBoundingClientRect().top <= line) cur = i; });
+      if (max > 0 && window.scrollY >= max - 2) cur = targets.length - 1;
+    }
     links.forEach(function (a, i) {
       if (i === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current');
     });
@@ -1167,6 +1215,7 @@ footer p + p { margin-top: 8px; }
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
+  window.addEventListener('hashchange', onScroll);
   update();
 
   var id = LEGACY[location.hash.slice(1)];
