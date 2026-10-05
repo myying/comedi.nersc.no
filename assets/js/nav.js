@@ -25,15 +25,4 @@
   toggle.addEventListener('click', function () { setOpen(!list.classList.contains('open')); });
   links.forEach(function (a) { a.addEventListener('click', function () { setOpen(false); }); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
-
-  var ticking = false;
-  function update() {
-    ticking = false;
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    nav.style.setProperty('--depth', (max > 0 ? Math.min(100, 100 * window.scrollY / max) : 0) + '%');
-  }
-  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', onScroll);
-  update();
 })();

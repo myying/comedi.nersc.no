@@ -58,7 +58,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-section[id], #contact, .obj-panel { scroll-margin-top: calc(var(--nav-h) + 16px); }
+section[id], #contact, .obj-panel { scroll-margin-top: calc(var(--nav-h) + 30px); }
 body {
   margin: 0;
   min-height: 100vh; display: flex; flex-direction: column;
@@ -177,7 +177,7 @@ main section { padding-block: 56px 0; }
   gap: 32px;
   align-items: start;
 }
-.wheel-col { position: sticky; top: calc(var(--nav-h) + 16px); }
+.wheel-col { position: sticky; top: calc(var(--nav-h) + 30px); }
 @media (max-width: 800px) {
   .obj-stage { grid-template-columns: minmax(0, 1fr); }
   .wheel-col { position: static; }
@@ -436,6 +436,14 @@ footer {
   position: relative; background: var(--seabed);
   padding-block: 30px 40px; font-size: 0.9rem; color: rgba(255, 255, 255, 0.72);
 }
+/* wavy waterline: a navy strip cut by a wave mask, along the footer top and (flipped) the nav bottom */
+footer::before, .site-nav::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 14px; background: var(--seabed);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14' preserveAspectRatio='none'%3E%3Cpath d='M0 7 Q100 0 200 7 T400 7 V14 H0Z'/%3E%3C/svg%3E") 0 0 / 400px 14px repeat-x;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 14' preserveAspectRatio='none'%3E%3Cpath d='M0 7 Q100 0 200 7 T400 7 V14 H0Z'/%3E%3C/svg%3E") 0 0 / 400px 14px repeat-x;
+}
+footer::before { bottom: 100%; margin-bottom: -1px; }
+.site-nav::after { top: 100%; margin-top: -1px; transform: scaleY(-1); }
 footer a { color: #9adcf8; }
 footer strong, .f-head { color: #fff; }
 .f-head { font-family: var(--body); font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
@@ -448,8 +456,7 @@ footer p + p { margin-top: 8px; }
 @media (max-width: 680px) { footer .cols { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- navigation ----------
-   Light and glassy above the waterline; turns navy once the reader dives
-   below it. The thin bar along the bottom fills with depth (scroll). */
+   Same navy band as the footer; both meet the page with a wavy waterline. */
 .skip { position: absolute; left: 12px; top: -48px; z-index: 60; background: var(--surface); padding: 8px 12px; border-radius: 8px; }
 .skip:focus { top: 8px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -468,8 +475,6 @@ footer p + p { margin-top: 8px; }
 .nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.08); }
 .nav-links a[aria-current="page"] { color: #fff; }
 .nav-links a[aria-current="page"]::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: 1px; height: 2px; border-radius: 2px; background: #9adcf8; }
-.nav-depth { position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; }
-.nav-depth span { display: block; height: 100%; width: var(--depth, 0%); background: linear-gradient(90deg, var(--o1), var(--o2), var(--o3), var(--o4)); }
 .nav-toggle { display: none; margin-left: auto; width: 42px; height: 42px; border: 0; border-radius: 8px; background: none; color: #fff; cursor: pointer; place-items: center; }
 .bars, .bars::before, .bars::after { display: block; width: 20px; height: 2px; border-radius: 2px; background: currentColor; transition: transform 0.25s ease, opacity 0.2s ease; }
 .bars { position: relative; }
@@ -481,7 +486,7 @@ footer p + p { margin-top: 8px; }
 @media (max-width: 1000px) {
   .nav-toggle { display: grid; }
   .nav-links {
-    display: none; position: absolute; top: var(--nav-h); left: 0; right: 0;
+    display: none; position: absolute; top: var(--nav-h); left: 0; right: 0; z-index: 1;
     flex-direction: column; gap: 0; padding: 8px 12px 14px;
     background: var(--seabed); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
   }
