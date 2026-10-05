@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="author" content="Yue Ying">
+<meta name="description" content="COMEDI: COpernicus Marine services with Enhanced Data assimilation and improved Interoperability, a Horizon Europe project (2026-2030), grant agreement No. 101296319.">
+<title>Work progress | COMEDI</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/COMEDI.icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+<nav class="site-nav" id="site-nav" aria-label="Main">
+  <div class="nav-inner">
+    <a class="brand" href="index.html"><img src="assets/img/COMEDI.logo-white.svg" alt="COMEDI" width="106" height="30"></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links"><span class="bars" aria-hidden="true"></span><span class="sr">Menu</span></button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="objectives.html">Objectives</a></li>
+      <li><a href="workprogress.html">Work progress</a></li>
+      <li><a href="outputs.html">Outputs</a></li>
+      <li><a href="news.html">News &amp; Events</a></li>
+    </ul>
+  </div>
+  <div class="nav-depth" aria-hidden="true"><span></span></div>
+</nav>
+
+<main class="deep" id="main" style="counter-reset: depth 2">
+<div class="wrap">
+
+    <section id="workprogress">
+      <div class="section-head">
+        <p class="eyebrow">Work and progress</p>
+        <h2>Work progress</h2>
+        <p class="note">Eight work packages over 48 months, and how each innovation is progressing across the MFCs and DA software.</p>
+      </div>
+      <div class="section-head">
+        <p class="eyebrow">How the work is organised</p>
+        <h3>Work plan</h3>
+        <p class="note">Eight work packages over 48 months. Bars are coloured by the objective they serve.</p>
+      </div>
+      <div class="gantt" role="table" aria-label="Work packages with lead partner and duration in project months">
+        <div class="g-row g-head" role="row"><div class="g-label" role="columnheader">Work package</div><div class="g-track" role="columnheader"><span>Year 1</span><span>Year 2</span><span>Year 3</span><span>Year 4</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP1</b>Management and coordination<small>Lead: NERSC</small></div><div class="g-track" role="cell"><span class="g-bar navy" style="--s:1;--e:48;--c:#175f83">M1&ndash;M48</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP2</b>Forecast uncertainty representation<small>Lead: CNR</small></div><div class="g-track" role="cell"><span class="g-bar" style="--s:1;--e:24;--c:var(--o1)">M1&ndash;M24</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP3</b>Core assimilation method<small>Lead: ULi&egrave;ge</small></div><div class="g-track" role="cell"><span class="g-bar" style="--s:1;--e:24;--c:var(--o1)">M1&ndash;M24</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP4</b>Observation operator and uncertainty<small>Lead: CERFACS</small></div><div class="g-track" role="cell"><span class="g-bar" style="--s:1;--e:24;--c:var(--o2)">M1&ndash;M24</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP5</b>Observation impact evaluation<small>Lead: UKMET</small></div><div class="g-track" role="cell"><span class="g-bar" style="--s:18;--e:44;--c:var(--o2)">M18&ndash;M44</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP6</b>Interoperable software development<small>Lead: MOi</small></div><div class="g-track" role="cell"><span class="g-bar" style="--s:13;--e:36;--c:var(--o3)">M13&ndash;M36</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP7</b>Demonstration in MFCs<small>Lead: OGS</small></div><div class="g-track" role="cell"><span class="g-bar" style="--s:25;--e:45;--c:var(--o4)">M25&ndash;M45</span></div></div>
+        <div class="g-row" role="row"><div class="g-label" role="cell"><b>WP8</b>Dissemination, exploitation and communication<small>Lead: NERSC</small></div><div class="g-track" role="cell"><span class="g-bar navy" style="--s:1;--e:48;--c:#175f83">M1&ndash;M48</span></div></div>
+      </div>
+      <div class="section-head">
+        <p class="eyebrow">COMEDI Innovations</p>
+        <h3>Progress on sharing each innovation</h3>
+          <p class="note">Each row is a COMEDI innovation; each column an MFC or a DA software package. The colour shows how the innovation reaches it, and the marks show the status of each task. A task links an MFC with the DA software it uses, so both cells change together.</p>
+        </div>
+        <div class="p-summary" id="p-summary"></div>
+        <div class="p-legend">
+          <span><i class="sw c-D"></i>Initial implementation</span>
+          <span><i class="sw c-L"></i>Shared as a module, shown once the initial implementation is done</span>
+          <span><i class="sw c-Y"></i>Shared through a new interface</span>
+          <span><i class="sw c-B"></i>Already available</span>
+        </div>
+        <div class="p-legend">
+          <span><i class="sw st-progress"></i>In progress</span>
+          <span><i class="sw st-done"></i>Done</span>
+          <span class="gap"><b class="xk">X</b>Demonstration complete</span>
+        </div>
+        <div class="p-scroll"><table class="p-table" id="p-table"></table></div>
+        <p class="p-detail" id="p-detail" aria-live="polite">Select a cell to see its task. For a task that uses an interface, a dashed outline marks the software the method comes from.</p>
+        <p class="p-updated" id="p-updated"></p>
+    </section>
+
+</div>
+</main>
+
+<footer>
+  <div class="wrap cols">
+    <div id="contact">
+      <h2 class="f-head">Contact</h2>
+      <p><a href="../../../index.html">Yue (Michael) Ying</a><br>Project Coordinator</p>
+      <div class="f-org">
+        <img src="assets/img/logos/nersc.svg" alt="" width="47" height="60">
+        <p><a href="https://nersc.no/">Nansen Environmental and Remote Sensing Center</a><br>Thorm&oslash;hlens gate 47<br>5006 Bergen, Norway</p>
+      </div>
+    </div>
+    <div>
+      <p class="eu-flag">
+        <svg width="36" height="24" viewBox="0 0 36 24" aria-hidden="true"><rect width="36" height="24" fill="#003399"/><g fill="#ffcc00"><circle cx="18" cy="5" r="1.1"/><circle cx="21.5" cy="5.94" r="1.1"/><circle cx="24.06" cy="8.5" r="1.1"/><circle cx="25" cy="12" r="1.1"/><circle cx="24.06" cy="15.5" r="1.1"/><circle cx="21.5" cy="18.06" r="1.1"/><circle cx="18" cy="19" r="1.1"/><circle cx="14.5" cy="18.06" r="1.1"/><circle cx="11.94" cy="15.5" r="1.1"/><circle cx="11" cy="12" r="1.1"/><circle cx="11.94" cy="8.5" r="1.1"/><circle cx="14.5" cy="5.94" r="1.1"/></g></svg>
+        Funded by the European Union
+      </p>
+      <p>COMEDI has received funding from the European Union's Horizon Europe research and innovation programme under grant agreement No. 101296319. Views and opinions expressed are those of the author(s) only and do not necessarily reflect those of the European Union. Neither the European Union nor the granting authority can be held responsible for them.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/nav.js"></script>
+<script src="assets/js/progress.js"></script>
+<script src="assets/js/glance.js"></script>
+</body>
+</html>
