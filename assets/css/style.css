@@ -56,7 +56,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { font-size: 112.5%; scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 section[id], #contact, .obj-panel { scroll-margin-top: calc(var(--nav-h) + 30px); }
 body {
@@ -65,7 +65,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--body);
-  font-size: 17px;
+  font-size: 1rem;
   line-height: 1.6;
 }
 a { color: var(--link); text-underline-offset: 3px; text-decoration-thickness: 1px; }
