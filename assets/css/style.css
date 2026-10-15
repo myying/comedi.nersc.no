@@ -450,7 +450,9 @@ footer strong, .f-head { color: #fff; }
 footer .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 .f-org { display: flex; gap: 14px; align-items: flex-start; margin-top: 16px; }
 .f-org img { flex: 0 0 auto; background: #fff; padding: 4px; border-radius: 4px; }
-.f-links { list-style: none; margin: 16px 0 0; padding: 0; }
+.f-links { list-style: none; margin: 0; padding: 0; }
+#contact { margin-top: 24px; }
+.f-icon { vertical-align: -3px; margin-right: 6px; }
 .f-links li + li { margin-top: 4px; }
 footer p + p { margin-top: 8px; }
 .eu-flag { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; color: #fff; }
