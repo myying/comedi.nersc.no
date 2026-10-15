@@ -447,17 +447,17 @@ footer::before { bottom: 100%; margin-bottom: -1px; }
 footer a { color: #9adcf8; }
 footer strong, .f-head { color: #fff; }
 .f-head { font-family: var(--body); font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
-footer .cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+footer .cols { display: grid; grid-template-columns: auto auto minmax(0, 1fr); gap: 28px 48px; }
 .f-org { display: flex; gap: 14px; align-items: flex-start; margin-top: 16px; }
 .f-org img { flex: 0 0 auto; background: #fff; padding: 4px; border-radius: 4px; }
 .f-links { list-style: none; margin: 0; padding: 0; }
-#contact { margin-top: 24px; }
 .f-icon { vertical-align: -3px; margin-right: 6px; }
 .f-links li + li { margin-top: 4px; }
 footer p + p { margin-top: 8px; }
 .eu-flag { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; color: #fff; }
 .eu-flag svg { flex: 0 0 auto; border-radius: 2px; }
-@media (max-width: 680px) { footer .cols { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 900px) { footer .cols { grid-template-columns: auto minmax(0, 1fr); } .f-eu { grid-column: 1 / -1; } }
+@media (max-width: 560px) { footer .cols { grid-template-columns: minmax(0, 1fr); } }
 
 /* ---------- navigation ----------
    Same navy band as the footer; both meet the page with a wavy waterline. */
