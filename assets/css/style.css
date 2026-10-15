@@ -357,7 +357,7 @@ main section { padding-block: 80px 0; }
 .gantt { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 16px; overflow: hidden; }
 .g-row { display: grid; grid-template-columns: minmax(0, 270px) minmax(0, 1fr); gap: 14px; align-items: center; padding-block: 6px; }
 .g-row + .g-row { border-top: 1px solid var(--line); }
-.g-label { line-height: 1.25; font-size: 0.93rem; }
+.g-label { line-height: 1.25; font-size: 0.93rem; position: relative; z-index: 1; }   /* in front of the today line on phones */
 .g-label b { font-family: var(--mono); font-weight: 500; font-size: 0.78rem; margin-right: 6px; }
 .g-label small { color: var(--muted); display: block; margin-top: 2px; }
 .g-track {
