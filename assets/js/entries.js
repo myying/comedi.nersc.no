@@ -63,7 +63,7 @@ var Entries = (function () {
     body.querySelectorAll('p').forEach(function (p) {
       var t = p.textContent.replace(/\s+/g, ' ').trim();
       if (!t) return;
-      if (used >= chars) { more = true; return; }
+      if (chars - used < 80) { more = true; used = chars; return; }   // too little room left: don't start a paragraph just to cut it
       if (used + t.length <= chars) { out.push(p.innerHTML); used += t.length; return; }
       var cut = t.slice(0, chars - used);
       out.push(attr(cut.slice(0, cut.lastIndexOf(' ') > 0 ? cut.lastIndexOf(' ') : cut.length)) + '&hellip;');
