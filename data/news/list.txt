@@ -1,0 +1,3 @@
+# One folder per line; the pages sort them by date.
+2026-09-21-kickoff
+2026-09-01-project-starts

@@ -89,13 +89,15 @@ ul { margin: 0; padding-left: 1.1em; }
 /* ---------- hero ---------- */
 .hero {
   position: relative;
-  padding-block: 8px 100px;
+  padding-block: 8px 56px;
   text-align: center;
 }
 .back { font-size: 0.9rem; }
-.hero > .wrap > .eyebrow { margin-top: 30px; }
-.logo { display: block; width: min(520px, 100%); height: auto; margin: 12px auto 0; }
+.logo { display: block; width: min(520px, 100%); height: auto; margin: 42px auto 0; overflow: visible; }
 .logo .t { fill: var(--logo-ink); }
+.logo-wheel { transform-box: fill-box; transform-origin: center; transition: transform 0.2s ease; }
+.logo-wheel:hover, .logo-wheel:focus-visible { transform: scale(1.05); }
+@media (prefers-reduced-motion: reduce) { .logo-wheel { transition: none; } }
 .expansion {
   font-family: var(--display);
   font-weight: 500;
@@ -123,7 +125,7 @@ ul { margin: 0; padding-left: 1.1em; }
 @media (max-width: 720px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ---------- at a glance (above the waterline) ---------- */
-.glance { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; text-align: left; }
+.glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 18px; text-align: left; }
 .gl-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; }
 .gl-obj { list-style: none; padding: 0; display: grid; gap: 6px; }
 .gl-obj a { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; font-family: var(--display); font-weight: 600; line-height: 1.25; border-radius: 8px; padding: 2px 4px 2px 0; }
@@ -138,23 +140,20 @@ ul { margin: 0; padding-left: 1.1em; }
 .gl-line { font-size: 0.93rem; color: var(--muted); line-height: 1.4; }
 .gl-line:empty { display: none; }
 .gl-line b { color: var(--ink); font-weight: 600; }
+.gl-news-card { grid-column: 1 / -1; }
+.gl-news { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.gl-item { display: flex; flex-direction: column; gap: 10px; }
+.gl-item > div { display: flex; flex-direction: column; flex: 1; }
+.gl-item img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; background: var(--bg); }
+.gl-item img.ph { object-fit: contain; padding: 18px; box-sizing: border-box; opacity: 0.5; }
 .gl-news time { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 .gl-news h3 { margin-top: 2px; }
 .gl-news p { color: var(--muted); margin-top: 4px; font-size: 0.95rem; }
+.gl-read { margin-top: auto; padding-top: 8px; font-size: 0.92rem; }
 .gl-more { margin-top: auto; font-weight: 600; font-size: 0.92rem; }
 .gl-more::after { content: " \2192"; }
-@media (max-width: 860px) { .glance { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) { .glance, .gl-news { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- the waterline ---------- */
-.dive {
-  position: absolute; left: 50%; bottom: 30px; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); text-decoration: none;
-}
-.dive:hover { color: var(--link); }
-.dive svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; animation: bob 2.4s ease-in-out infinite; }
-@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(4px); } }
 
 /* ---------- below the waterline ---------- */
 .deep { flex: 1; padding-bottom: 56px; }
@@ -430,6 +429,15 @@ main section { padding-block: 80px 0; }
 .timeline time { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .timeline h3 { margin-top: 2px; }
 .timeline p { color: var(--muted); margin-top: 4px; }
+.timeline h3 a { color: inherit; text-decoration: none; }
+.timeline h3 a:hover { text-decoration: underline; }
+.read-more { display: inline-block; margin-top: 6px; font-size: 0.92rem; }
+.article { padding-top: 56px; max-width: 760px; }
+.article time { display: block; margin-top: 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+.article h2 { margin: 4px 0 18px; }
+.article p + p, .article p + img, .article img + p { margin-top: 14px; }
+.article img { display: block; max-width: 100%; height: auto; border-radius: 10px; }
+.timeline img { display: block; width: min(100%, 520px); height: auto; max-height: 320px; object-fit: cover; border-radius: 10px; margin-top: 10px; }
 
 footer {
   position: relative; background: var(--seabed);

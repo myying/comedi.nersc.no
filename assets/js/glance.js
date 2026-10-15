@@ -1,5 +1,5 @@
 // Current project month: marks today on the work plan, and fills the home page's "Where we are" and
-// "Latest news" cards from the work progress and news pages, so those pages stay the single source.
+// "Latest news" cards from the work progress page and data/news (via entries.js), so those stay the single source.
 (function () {
   var now = new Date();
   // M1 = September 2026
@@ -27,11 +27,15 @@
     });
     if (active.length) document.getElementById('gl-wps').innerHTML = 'Active now: <b>' + active.join(', ') + '</b>';
   }).catch(function () {});
-  page('news.html').then(function (doc) {
-    var first = doc.querySelector('#news .timeline li');
-    if (!first) return;
-    var box = document.getElementById('gl-news');
-    box.innerHTML = '';
-    ['time', 'h3', 'p'].forEach(function (t) { var el = first.querySelector(t); if (el) box.appendChild(document.importNode(el, true)); });
+  // The three newest news items, each with its picture or the COMEDI icon.
+  Entries.list('news', 3).then(function (items) {
+    document.getElementById('gl-news').innerHTML = items.map(function (e) {
+      var img = e.img ? '<img src="' + e.img + '" alt="' + e.alt.replace(/"/g, '&quot;') + '">'
+                      : '<img class="ph" src="assets/img/COMEDI.icon.svg" alt="">';
+      var title = document.createElement('span');
+      title.innerHTML = e.title;   // card heading as plain text
+      return '<article class="gl-item">' + img + '<div><time datetime="' + e.date + '">' + e.nice + '</time>' +
+        '<h3>' + title.textContent.replace(/</g, '&lt;') + '</h3><p>' + e.summary + '</p><a class="gl-read" href="' + e.url + '">Read more</a></div></article>';
+    }).join('');
   }).catch(function () {});
 })();
