@@ -147,7 +147,7 @@ ul { margin: 0; padding-left: 1.1em; }
   overflow: hidden;
 }
 .facts div { background: var(--surface); padding: 12px 14px; text-align: center; }
-.facts dt { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.facts dt { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .facts dd { margin: 3px 0 0; font-weight: 600; line-height: 1.35; font-variant-numeric: tabular-nums; }
 @media (max-width: 720px) { .facts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
@@ -169,6 +169,10 @@ ul { margin: 0; padding-left: 1.1em; }
 .gl-line b { color: var(--ink); font-weight: 600; }
 .gl-news-card { grid-column: 1 / -1; }
 .timeline.gl-news { --pic: 220px; }
+/* home cards: one size for labels, titles and text */
+.timeline.gl-news time { font-size: 0.78rem; }
+.timeline.gl-news h3 { font-size: 1rem; }
+.timeline.gl-news p { font-size: 0.93rem; line-height: 1.4; }
 .gl-more { margin-top: auto; font-weight: 600; font-size: 0.92rem; }
 .gl-more::after { content: " \2192"; }
 @media (max-width: 860px) { .glance { grid-template-columns: minmax(0, 1fr); } }
