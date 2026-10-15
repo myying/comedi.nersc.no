@@ -79,7 +79,7 @@ fetch('data/innovations.json').then(function (res) { return res.json(); }).then(
   }
 
   function render() {
-    var h = '<thead><tr class="grp"><th></th><th colspan="' + data.split + '">MFCs</th><th class="sep"></th>' +
+    var h = '<thead><tr class="grp"><th></th><th colspan="' + data.split + '">MFC</th><th class="sep"></th>' +
             '<th colspan="' + (data.cols.length - data.split) + '">DA software</th></tr><tr><th></th>';
     data.cols.forEach(function (c, i) {
       if (i === data.split) h += '<th class="sep"></th>';
@@ -176,7 +176,7 @@ fetch('data/innovations.json').then(function (res) { return res.json(); }).then(
     return s + '.';
   }
 
-  // Selecting a cell highlights every cell of its task(s): the MFC and the DA software it uses.
+  // Selecting a cell highlights every cell of its task(s): the Monitoring and Forecasting Centre and the data assimilation software it uses.
   if (table) table.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-r]');
     if (!b) return;
