@@ -428,6 +428,8 @@ main section { padding-block: 80px 0; }
   background: rgba(0, 0, 0, 0.55); color: #fff; font-family: var(--display); font-weight: 600; font-size: 1.2rem;
 }
 @media (max-width: 560px) { .timeline li.has-pics { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
+.timeline li.empty { color: var(--muted); }
+.timeline li.empty::before { display: none; }
 .article { padding-top: 56px; max-width: 760px; }
 .article time { display: block; margin-top: 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 .article h2 { margin: 4px 0 18px; }

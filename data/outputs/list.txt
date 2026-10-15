@@ -1,2 +1,6 @@
 # One folder per line; the pages sort them by date.
-2026-d1-1-data-management-plan
+# Only completed outputs are listed; remove the # in front of an entry once it is completed.
+# 2026-11-30-ms1-1-project-repository
+# 2026-11-30-d8-1-website
+# 2027-02-28-d1-1-data-management-plan
+# 2027-02-28-d8-2-communication-plan

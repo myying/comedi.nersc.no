@@ -2,7 +2,8 @@
 //   data/<section>/list.txt                     one folder name per line
 //   data/<section>/<date>-<name>/article.html   <h1> title, first <p> summary, first <img> thumbnail, then any HTML
 // Fills every list marked data-entries="<section>" (news.html, outputs.html, the home page's news card; optional
-// data-max = number of entries, data-chars = length of the text preview) and the article page (#article).
+// data-max = number of entries, data-chars = length of the text preview, data-order="oldest" = oldest first,
+// data-empty = text shown while there are no entries) and the article page (#article).
 var Entries = (function () {
   var MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
   var FOLDER = /^(\d{4}(?:-\d{2}){0,2})-[\w.-]+$/;   // <date>-<name>, date = YYYY, YYYY-MM or YYYY-MM-DD
@@ -91,7 +92,9 @@ var Entries = (function () {
   function renderList(box) {
     var max = +box.getAttribute('data-max') || 0, chars = +box.getAttribute('data-chars') || 400;
     list(box.getAttribute('data-entries'), max).then(function (items) {
-      box.innerHTML = items.map(function (e) { return entryHTML(e, chars); }).join('');
+      if (box.getAttribute('data-order') === 'oldest') items.reverse();
+      box.innerHTML = items.length ? items.map(function (e) { return entryHTML(e, chars); }).join('')
+        : '<li class="empty">' + attr(box.getAttribute('data-empty') || '') + '</li>';
     }).catch(function (err) { console.warn(err); });
   }
 
