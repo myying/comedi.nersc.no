@@ -428,6 +428,7 @@ main section { padding-block: 80px 0; }
 .article time { display: block; margin-top: 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 .article h2 { margin: 4px 0 18px; }
 .article p + p, .article p + img, .article img + p { margin-top: 14px; }
+.article h3 { margin: 32px 0 8px; font-size: 1.2rem; }
 .article img { display: block; max-width: 100%; height: auto; border-radius: 10px; }
 
 footer {
