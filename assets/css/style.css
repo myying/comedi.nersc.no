@@ -109,6 +109,7 @@ ul { margin: 0; padding-left: 1.1em; }
   text-transform: uppercase;
   color: var(--muted);
 }
+/* Icons (class "ms", inline SVG): Material Symbols by Google, Apache License 2.0, https://fonts.google.com/icons */
 .ms { width: 1.35em; height: 1.35em; fill: currentColor; flex: 0 0 auto; }
 .wrap { max-width: 1000px; margin: 0 auto; padding-inline: 20px; }
 
