@@ -141,18 +141,10 @@ ul { margin: 0; padding-left: 1.1em; }
 .gl-line:empty { display: none; }
 .gl-line b { color: var(--ink); font-weight: 600; }
 .gl-news-card { grid-column: 1 / -1; }
-.gl-news { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.gl-item { display: flex; flex-direction: column; gap: 10px; }
-.gl-item > div { display: flex; flex-direction: column; flex: 1; }
-.gl-item img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 8px; background: var(--bg); }
-.gl-item img.ph { object-fit: contain; padding: 18px; box-sizing: border-box; opacity: 0.5; }
-.gl-news time { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
-.gl-news h3 { margin-top: 2px; }
-.gl-news p { color: var(--muted); margin-top: 4px; font-size: 0.95rem; }
-.gl-read { margin-top: auto; padding-top: 8px; font-size: 0.92rem; }
+.timeline.gl-news { --pic: 220px; }
 .gl-more { margin-top: auto; font-weight: 600; font-size: 0.92rem; }
 .gl-more::after { content: " \2192"; }
-@media (max-width: 860px) { .glance, .gl-news { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) { .glance { grid-template-columns: minmax(0, 1fr); } }
 
 
 /* ---------- below the waterline ---------- */
@@ -417,27 +409,37 @@ main section { padding-block: 80px 0; }
 .jdts p { color: var(--muted); font-size: 0.95rem; margin-top: 4px; line-height: 1.45; }
 @media (max-width: 720px) { .jdts { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- timeline ---------- */
-.timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); }
-.timeline li { position: relative; padding: 0 0 22px 22px; }
+/* ---------- timeline: news and outputs (entries.js) ---------- */
+.timeline { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--line); --pic: 300px; }
+.timeline li { position: relative; padding: 0 0 28px 22px; }
 .timeline li::before {
   content: ""; position: absolute; left: -7px; top: 0.45em;
   width: 12px; height: 12px; border-radius: 50%;
   background: var(--surface); border: 2px solid var(--deep);
 }
-.timeline li.upcoming::before { background: var(--bg); border-style: dashed; }
+.timeline li.has-pics { display: grid; grid-template-columns: minmax(0, 1fr) var(--pic); gap: 24px; align-items: start; }
 .timeline time { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .timeline h3 { margin-top: 2px; }
-.timeline p { color: var(--muted); margin-top: 4px; }
+.timeline p { color: var(--muted); margin-top: 6px; }
 .timeline h3 a { color: inherit; text-decoration: none; }
 .timeline h3 a:hover { text-decoration: underline; }
-.read-more { display: inline-block; margin-top: 6px; font-size: 0.92rem; }
+.read-more { display: inline-block; margin-top: 8px; font-size: 0.92rem; }
+/* picture grid right of the text: 1 wide, 2 side by side, 3 = one wide over two, 4 = 2x2, more = "+N" on the last */
+.entry-pics { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.entry-pics img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 6px; }
+.entry-pics.n1 { grid-template-columns: 1fr; }
+.entry-pics.n1 img, .entry-pics.n3 > :first-child { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+.entry-pics .more { position: relative; }
+.entry-pics .more span {
+  position: absolute; inset: 0; display: grid; place-items: center; border-radius: 6px;
+  background: rgba(0, 0, 0, 0.55); color: #fff; font-family: var(--display); font-weight: 600; font-size: 1.2rem;
+}
+@media (max-width: 560px) { .timeline li.has-pics { grid-template-columns: minmax(0, 1fr); gap: 12px; } }
 .article { padding-top: 56px; max-width: 760px; }
 .article time { display: block; margin-top: 18px; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
 .article h2 { margin: 4px 0 18px; }
 .article p + p, .article p + img, .article img + p { margin-top: 14px; }
 .article img { display: block; max-width: 100%; height: auto; border-radius: 10px; }
-.timeline img { display: block; width: min(100%, 520px); height: auto; max-height: 320px; object-fit: cover; border-radius: 10px; margin-top: 10px; }
 
 footer {
   position: relative; background: var(--seabed);

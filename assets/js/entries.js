@@ -1,8 +1,8 @@
 // News items and project outputs, read in the browser from their source folders:
 //   data/<section>/list.txt                     one folder name per line
 //   data/<section>/<date>-<name>/article.html   <h1> title, first <p> summary, first <img> thumbnail, then any HTML
-// Fills the list on news.html / outputs.html (data-entries="<section>") and the article page (#article);
-// the home page's news card uses Entries.list().
+// Fills every list marked data-entries="<section>" (news.html, outputs.html, the home page's news card; optional
+// data-max = number of entries, data-chars = length of the text preview) and the article page (#article).
 var Entries = (function () {
   var MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ');
   var FOLDER = /^(\d{4}(?:-\d{2}){0,2})-[\w.-]+$/;   // <date>-<name>, date = YYYY, YYYY-MM or YYYY-MM-DD
@@ -15,7 +15,8 @@ var Entries = (function () {
     return p.length > 2 ? +p[2] + ' ' + s : s;
   }
   function text(url) {
-    return fetch(url).then(function (res) { if (!res.ok) throw new Error(url + ': ' + res.status); return res.text(); });
+    // no-cache: always revalidate, so a new or edited entry shows up at once
+    return fetch(url, { cache: 'no-cache' }).then(function (res) { if (!res.ok) throw new Error(url + ': ' + res.status); return res.text(); });
   }
   function attr(s) { return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); }
 
@@ -30,12 +31,10 @@ var Entries = (function () {
         var at = el.hasAttribute('src') ? 'src' : 'href';
         if (el.getAttribute(at).charAt(0) !== '#') el.setAttribute(at, new URL(el.getAttribute(at), dir).href);
       });
-      var h1 = body.querySelector('h1'), p = body.querySelector('p'), img = body.querySelector('img');
+      var h1 = body.querySelector('h1');
       return {
         section: section, slug: slug, date: m[1], nice: niceDate(m[1]),
-        url: 'article.html?' + section + '/' + slug,
-        title: h1 ? h1.innerHTML : slug, summary: p ? p.innerHTML : '',
-        img: img ? img.getAttribute('src') : '', alt: img ? img.alt : '', body: body
+        url: 'article.html?' + section + '/' + slug, title: h1 ? h1.innerHTML : slug, body: body
       };
     });
   }
@@ -56,14 +55,43 @@ var Entries = (function () {
     }).then(function (all) { return all.filter(Boolean); });
   }
 
-  function renderList(ol) {
-    list(ol.getAttribute('data-entries')).then(function (items) {
-      ol.innerHTML = items.map(function (e) {
-        return '<li id="' + e.slug + '"><time datetime="' + e.date + '">' + e.nice + '</time>' +
-          '<h3><a href="' + e.url + '">' + e.title + '</a></h3>' +
-          (e.img ? '<img src="' + attr(e.img) + '" alt="' + attr(e.alt) + '">' : '') +
-          '<p>' + e.summary + '</p><a class="read-more" href="' + e.url + '">Read more</a></li>';
-      }).join('');
+  var PICS = 4;   // pictures shown next to an entry in the lists
+
+  // The article's paragraphs up to about `chars` characters; more = the article has anything the preview leaves out.
+  function preview(body, chars) {
+    var out = [], used = 0, more = false;
+    body.querySelectorAll('p').forEach(function (p) {
+      var t = p.textContent.replace(/\s+/g, ' ').trim();
+      if (!t) return;
+      if (used >= chars) { more = true; return; }
+      if (used + t.length <= chars) { out.push(p.innerHTML); used += t.length; return; }
+      var cut = t.slice(0, chars - used);
+      out.push(attr(cut.slice(0, cut.lastIndexOf(' ') > 0 ? cut.lastIndexOf(' ') : cut.length)) + '&hellip;');
+      used = chars; more = true;
+    });
+    if (body.querySelectorAll('img').length > PICS || body.querySelector('ul, ol, table, figure, blockquote, h2, h3, h4, video, iframe'))
+      more = true;
+    return { html: out.map(function (h) { return '<p>' + h + '</p>'; }).join(''), more: more };
+  }
+
+  function entryHTML(e, chars) {
+    var imgs = Array.prototype.slice.call(e.body.querySelectorAll('img')), pv = preview(e.body, chars);
+    var shown = imgs.slice(0, PICS), extra = imgs.length - shown.length;
+    var pics = shown.map(function (img, i) {
+      var tag = '<img src="' + attr(img.getAttribute('src')) + '" alt="' + attr(img.alt) + '" loading="lazy">';
+      return extra && i === shown.length - 1 ? '<div class="more">' + tag + '<span>+' + extra + '</span></div>' : tag;
+    }).join('');
+    var title = pv.more ? '<a href="' + e.url + '">' + e.title + '</a>' : e.title;
+    return '<li id="' + e.slug + '"' + (shown.length ? ' class="has-pics"' : '') + '><div>' +
+      '<time datetime="' + e.date + '">' + e.nice + '</time><h3>' + title + '</h3>' + pv.html +
+      (pv.more ? '<a class="read-more" href="' + e.url + '">Read more</a>' : '') + '</div>' +
+      (shown.length ? '<div class="entry-pics n' + shown.length + '">' + pics + '</div>' : '') + '</li>';
+  }
+
+  function renderList(box) {
+    var max = +box.getAttribute('data-max') || 0, chars = +box.getAttribute('data-chars') || 400;
+    list(box.getAttribute('data-entries'), max).then(function (items) {
+      box.innerHTML = items.map(function (e) { return entryHTML(e, chars); }).join('');
     }).catch(function (err) { console.warn(err); });
   }
 
