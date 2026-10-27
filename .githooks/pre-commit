@@ -1,0 +1,6 @@
+#!/bin/sh
+# Recompile the pages from data/ and add the result to the commit.
+# Enable once per clone: git config core.hooksPath .githooks
+# ponytail: compiles the working tree, so unstaged edits in data/ end up in the staged pages; stage data/ first.
+out=$(python3 compile.py) || exit 1
+[ -z "$out" ] || printf '%s\n' "$out" | xargs git add -A --

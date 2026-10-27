@@ -17,8 +17,21 @@ Static website of the COMEDI project. Plain HTML, CSS and JavaScript, no build s
 
    The `<h1>` is the title, the first `<p>` is the summary shown in the lists, and the first `<img>` (optional)
    is the thumbnail. Keep images to a sensible size (around 1600 px wide).
-3. Add the folder name as a new line in `data/news/list.txt` (or `data/outputs/list.txt`). The pages read the
-   list in the browser and sort it by date: the news and outputs pages list every entry, the home page shows the
-   three newest news items, and "Read more" opens `article.html?news/<folder>`.
-4. Commit. To preview locally, run `python3 -m http.server` in the repo and open http://localhost:8000
-   (opening the files directly does not work, the browser blocks reading the data files).
+3. Add the folder name as a new line in `data/news/list.txt` (or `data/outputs/list.txt`), then commit.
+   `compile.py` sorts the list by date and writes the entries into the pages: the news and outputs pages list
+   every entry, the home page shows the three newest news items, and "Read more" opens `news/<folder>.html`.
+
+## Compiling the pages
+
+The pages are plain HTML that visitors get complete, with nothing fetched in the browser. `compile.py` (Python 3,
+no extra packages) builds them from `data/`: the news and outputs lists and their article pages (`news/`,
+`outputs/`), the home page's latest news and task count, and the work progress table and summary (from
+`innovations.json`, `progress.csv`, `interfaces.csv`). It only rewrites the regions between
+`<!-- build:NAME -->` and `<!-- /build:NAME -->`; edit everything else in the pages by hand as usual.
+
+A pre-commit hook runs it and adds the compiled files to each commit. Enable it once per clone:
+
+    git config core.hooksPath .githooks
+
+Or run `./compile.py` yourself after changing `data/`. To preview, run `python3 -m http.server` in the repo and
+open http://localhost:8000 (opening the files directly also works now).
